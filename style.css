@@ -1,6 +1,7 @@
 :root {
   --grid-cols: 1;
   --grid-rows: 1;
+  --rainbow: blue;
 }
 
 h1 {
@@ -38,4 +39,15 @@ h1 {
 .btns-size {
   display: flex;
   justify-content: space-evenly;
+}
+
+.black {
+  background-color: #000;
+}
+.white {
+  background-color: #fff;
+}
+
+.rainbow {
+  background-color: var(--rainbow);
 }
