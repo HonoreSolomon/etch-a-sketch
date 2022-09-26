@@ -1,14 +1,16 @@
 const container = document.querySelector('.container');
-const size = 16;
 let color = 'black';
 const btns = document.querySelectorAll(
   '.btns-color button'
 );
 
-const getSize = () => {
+const setSize = () => {
+  removeRows();
   const input = document.querySelector('.btns input');
-  const size = input.value;
-  return size;
+  let size = input.value;
+  makeRows(size, size);
+  divs = document.querySelectorAll('.grid-item');
+  divEvent();
 };
 
 const makeRows = (rows, cols) => {
@@ -16,55 +18,65 @@ const makeRows = (rows, cols) => {
   container.style.setProperty('--grid-cols', cols);
   for (c = 0; c < rows * cols; c++) {
     const cell = document.createElement('div');
+    cell.classList.add('grid-item');
     container.appendChild(cell).className = 'grid-item';
   }
 };
-const rainbow = () =>
+const randomColor = () =>
   '#' +
   ((Math.random() * 0xffffff) << 0)
     .toString(16)
     .padStart(6, '0');
+
+const reset = () =>
+  divs.forEach((div) =>
+    div.style.setProperty('background-color', '')
+  );
+function etchColor(buttonColor) {
+  color = buttonColor;
+}
+
+const removeRows = () => {
+  divs = document.querySelectorAll('.grid-item');
+  divs.forEach((div) => div.remove());
+};
+function divEvent() {
+  for (const div of divs) {
+    div.addEventListener('mouseover', changeColor);
+  }
+}
+
 function setColor() {
-  switch (color) {
+  switch (this.value) {
     case 'black':
-      for (const div of divs) {
-        div.style.backgroundColor = '#fff';
-      }
-      console.log('black');
+      console.log(this.value);
+      etchColor(this.value);
       break;
     case 'white':
-      for (const div of divs) {
-        div.style.backgroundColor = '#000';
-      }
-      console.log('white');
+      console.log(this.value);
+      etchColor(this.value);
       break;
-    case 'Rainbow':
-      for (const div of divs) {
-        div.style.backgroundColor = '#fff';
-        this.style.setProperty('--rainbow', rainbow());
-        console.log('rainbow');
-      }
+    case 'random':
+      console.log(this.value);
+      etchColor(randomColor());
+
       break;
     case 'reset':
-      return color === ('black' || 'rainbow')
-        ? (div.style.backgroundColor = '#fff')
-        : (div.style.backgroundColor = '#000');
-      console.log('reset');
+      console.log(this.value);
+      reset();
+      break;
   }
-  color = this.value;
-  console.log(color);
 }
 
 function changeColor() {
-  this.classList.add(`${color}`);
+  this.style.setProperty('background-color', color);
 }
-makeRows(size, size);
-const divs = document.querySelectorAll('.grid-item');
+makeRows(16, 16);
+let divs = document.querySelectorAll('.grid-item');
+const sizeBtn = document.querySelector('.btns-size button');
+sizeBtn.addEventListener('click', setSize);
 
 for (const btn of btns) {
   btn.addEventListener('click', setColor);
 }
-
-for (const div of divs) {
-  div.addEventListener('mouseover', changeColor);
-}
+divEvent();
